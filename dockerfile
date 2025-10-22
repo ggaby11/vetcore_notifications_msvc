@@ -3,4 +3,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-CMD ["node", "src/receive.js"]
+CMD ["npm", "run", "dev"]
+
+# CMD ["node", "src/receive.js" ] para probar si esta recibiendo mensajes correctamente

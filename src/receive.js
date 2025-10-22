@@ -1,5 +1,5 @@
 import { connectRabbit } from './config/rabbitmq.js';
-import { sendEmail } from './services/emailService.js';
+import { sendEmail } from './services/emailServices.js';
 
 async function startConsumer() {
   const { channel } = await connectRabbit();

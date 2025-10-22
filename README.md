@@ -1,16 +1,27 @@
-# React + Vite
+# README
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Como correr la prueba
+1. en el docker-compose.yml solo debe estar rabbit auth y notifications
+2. cambiar DB_HOST=db en auth
+3. agrega un db en docker-compose image: mysql:8 y mas datos para la db
+4. aqui en notifications docker-compose up --build
+5. abrir la terminal en receive y ejecutar node receive.js
+ahora debe estarse esperando un mensaje... (se puede ver en rabbit)
+6. abrir la terminal de auth y docker-compose up --build
+7. en auth/src ejecutar publishUser.js { email: 'prueba3@gmail.com', name: 'Gaby' } (se puede ver en rabbit)
+ahora debe haber se enviado un mensaje a la cola
 
-Currently, two official plugins are available:
+## Explicacion de prueba funcionamiento de notificaciones + rabbitmq y auth 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Send
+Envia un mensaje a la cola usuario_registrado 
+channel.sendToQueue(queue, Buffer.from(msg));
+Los mensajes luego los enviara auth 
 
-## React Compiler
+### Receive
+Consume mensajes de la cola usuario_registrado
+channel.consume(queue, async (msg) => { ... });
+Este conusmidor si sera el original y unico, que trata las "peticiones" entre servicios
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Se debe correr en docker notificaciones para que tambien trbaje rabbit, por eso el docker file dice 
+CMD ["node", "src/receive.js"]
