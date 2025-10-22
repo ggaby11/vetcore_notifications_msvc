@@ -10,12 +10,12 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-export async function sendEmail(to, subject, text) {
+export async function sendEmail(to, subject, html) {
   const mailOptions = {
-    from: process.env.GMAIL_USER,
+    from: `"Hospital Veterinario" <${process.env.GMAIL_USER}>`,
     to,
     subject,
-    text
+    html,
   };
 
   try {
