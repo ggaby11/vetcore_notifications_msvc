@@ -5,12 +5,12 @@ async function send() {
     const connection = await amqp.connect(process.env.RABBITMQ_URL);
     const channel = await connection.createChannel();
     const queue = 'usuario_registrado';
-    const msg = 'Funcionaaa!';
+    const msg = 'registrado en cola';
 
     await channel.assertQueue(queue, { durable: false });
     channel.sendToQueue(queue, Buffer.from(msg));
 
-    console.log(" [x] Sent %s", msg);
+    console.log("Usuario", msg);
 
     setTimeout(() => {
       connection.close();

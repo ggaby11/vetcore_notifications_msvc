@@ -1,8 +1,16 @@
-FROM node:20
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-CMD ["npm", "run", "dev"]
+FROM node:20-alpine
 
-# CMD ["node", "src/receive.js" ] para probar si esta recibiendo mensajes correctamente
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install --production
+
+COPY . .
+
+ENV NODE_ENV=production
+
+# Comando para iniciar la aplicación
+# CMD ["npm", "run", "dev"]
+# Comando para iniciar el consumer de RabbitMQ
+CMD ["node", "src/receive.js"]
